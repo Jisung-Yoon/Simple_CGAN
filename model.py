@@ -1,12 +1,13 @@
 '''
-    Model: GAN
+    Model: Conditional GAN
 '''
+
 import tensorflow as tf
 from util import *
 from ops import *
 
 
-class GAN:
+class CGAN:
     def __init__(self,
                  sess,
                  latent_size=100,
@@ -20,6 +21,7 @@ class GAN:
         Args:
             latent_size: length of latent vector whichi is input of generator
             input_size: length of input vector (In MNIST case, input_size is 784)
+            label_size: length of label vector(For conditional GAN)
             activation function or optimizer can be altered to other options.
         '''
 
@@ -39,10 +41,8 @@ class GAN:
         self.G_input = tf.placeholder(tf.float32, [None, self.latent_size], name='g_input')
         self.D_input = tf.placeholder(tf.float32, [None, self.input_size], name='d_input')
         self.labels = tf.placeholder(tf.float32, [None, self.label_size], name='label')
-        # self.G_labels = tf.placeholder(tf.float32, [None, self.label_size], name='g_label')
-        # self.D_labels = tf.placeholder(tf.float32, [None, self.label_size], name='d_label')
 
-        # Concatenates inputs
+        # Concatenates inputs for Conditional GAN
         self.G_input_concat = tf.concat([self.G_input, self.labels], axis=1)
         self.D_input_concat = tf.concat([self.D_input, self.labels], axis=1)
 
@@ -104,8 +104,6 @@ class GAN:
         self.writer.add_summary(summary_str, self.counts)
 
         self.counts += 1
-
-        return d_loss, g_loss
 
     # Generator of GAN
     def generator(self, latent_var):

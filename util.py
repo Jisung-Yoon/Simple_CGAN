@@ -1,6 +1,11 @@
+'''
+    Util: define function to images processing
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+
 
 # Check path, If path does not exist, makes path
 def check_and_make_dir(path='./result'):
@@ -50,13 +55,6 @@ def load_mnist_datasets(seed):
     labels_one_hot.flat[index_offset + labels.ravel()] = 1
 
     return images/255., labels_one_hot
-
-
-def make_random_one_hot_vectors(number_of_vector, vector_length):
-    random_scalars = np.random.randint(10, size=number_of_vector)
-    one_hot_vectors = np.zeros((number_of_vector, vector_length))
-    one_hot_vectors[np.arange(number_of_vector), random_scalars] = 1
-    return one_hot_vectors
 
 
 # reshaped images and save images
