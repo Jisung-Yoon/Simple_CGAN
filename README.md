@@ -1,5 +1,5 @@
 # Conditional_GAN
-Tensorflow implementation of [Generative Adversarial Network(GAN)](https://arxiv.org/abs/1406.2661). <b
+Tensorflow implementation of [Generative Adversarial Network(GAN)](https://arxiv.org/abs/1406.2661). <br>
 This repository is minor change of [Vanilla_GAN](https://github.com/Jisung-Yoon/Vanilla_GAN).
 This model can generate MNIST samples with certian labels.
 
