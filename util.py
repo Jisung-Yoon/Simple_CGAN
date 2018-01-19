@@ -52,6 +52,13 @@ def load_mnist_datasets(seed):
     return images/255., labels_one_hot
 
 
+def make_random_one_hot_vectors(number_of_vector, vector_length):
+    random_scalars = np.random.randint(10, size=number_of_vector)
+    one_hot_vectors = np.zeros((number_of_vector, vector_length))
+    one_hot_vectors[np.arange(number_of_vector), random_scalars] = 1
+    return one_hot_vectors
+
+
 # reshaped images and save images
 def reshaped_and_save_images(images, path, epoch):
     reshaped_images = np.reshape(images, (-1, 28, 28))

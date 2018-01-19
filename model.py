@@ -11,6 +11,7 @@ class GAN:
                  sess,
                  latent_size=100,
                  input_size=28*28,
+                 label_size=10,
                  activation_function=tf.nn.relu,
                  optimizer=tf.train.AdamOptimizer,
                  learning_rate=0.0002,
@@ -31,16 +32,25 @@ class GAN:
 
         self.latent_size = latent_size
         self.input_size = input_size
+        self.label_size = label_size
         self.activation_function = activation_function
 
         # Make placeholder
         self.G_input = tf.placeholder(tf.float32, [None, self.latent_size], name='g_input')
         self.D_input = tf.placeholder(tf.float32, [None, self.input_size], name='d_input')
+        self.labels = tf.placeholder(tf.float32, [None, self.label_size], name='label')
+        # self.G_labels = tf.placeholder(tf.float32, [None, self.label_size], name='g_label')
+        # self.D_labels = tf.placeholder(tf.float32, [None, self.label_size], name='d_label')
+
+        # Concatenates inputs
+        self.G_input_concat = tf.concat([self.G_input, self.labels], axis=1)
+        self.D_input_concat = tf.concat([self.D_input, self.labels], axis=1)
 
         # Make layer
-        self.G = self.generator(self.G_input)
-        self.D_logits_data, self.D_data = self.discriminator(self.D_input)
-        self.D_logits_fake, self.D_fake = self.discriminator(self.G, reuse=True)
+        self.G = self.generator(self.G_input_concat)
+        self.G_concat = tf.concat([self.G, self.labels], axis=1)
+        self.D_logits_data, self.D_data = self.discriminator(self.D_input_concat)
+        self.D_logits_fake, self.D_fake = self.discriminator(self.G_concat, reuse=True)
 
         # Define loss function
         self.D_loss_data = tf.reduce_mean(
@@ -77,16 +87,18 @@ class GAN:
         self.writer = SummaryWriter(self.summary_path, self.sess.graph)
 
     # Train function (one_step)
-    def train(self, g_input, d_input):
+    def train(self, g_input, d_input, labels):
         D_feed_dict = {
             self.G_input: g_input,
-            self.D_input: d_input
+            self.D_input: d_input,
+            self.labels:labels
         }
         summary_str, d_loss, _ = self.sess.run([self.D_summary, self.D_loss, self.D_train], feed_dict=D_feed_dict)
         self.writer.add_summary(summary_str, self.counts)
 
         G_feed_dict = {
-            self.G_input: g_input
+            self.G_input: g_input,
+            self.labels: labels
         }
         summary_str, g_loss, _ = self.sess.run([self.G_summary, self.G_loss, self.G_train], feed_dict=G_feed_dict)
         self.writer.add_summary(summary_str, self.counts)
@@ -126,8 +138,9 @@ class GAN:
         return h3_logits, h3
 
     # Generate images using given latent variables.
-    def generating_images(self, g_input):
+    def generating_images(self, g_input, labels):
         feed_dict = {
-            self.G_input: g_input
+            self.G_input: g_input,
+            self.labels: labels
         }
         return self.sess.run(self.G, feed_dict=feed_dict)
