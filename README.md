@@ -1,13 +1,15 @@
-# Vanilla_GAN
-Tensorflow implementation of [Generative Adversarial Network(GAN)](https://arxiv.org/abs/1406.2661). <br/>
-This model generates MNIST images using GAN. 
+# Conditional_GAN
+Tensorflow implementation of [Generative Adversarial Network(GAN)](https://arxiv.org/abs/1406.2661). <b
+This repository is minor change of [Vanilla_GAN](https://github.com/Jisung-Yoon/Vanilla_GAN).
+This model can generate MNIST samples with certian labels.
 
 ## File discription
 - main.py: Main function of implemenation, construct and train the model, generates images
-- model.py: GAN class
+- model.py: CGAN class
 - downlad.py: Files for downlading MNIST data sets
 - ops.py: Operation functions
 - utils.py: Functions dealing with images processing.
+
 ## Prerequisites (my environments)
 - Python 3.5.2
 - Tensorflow > 0.14
