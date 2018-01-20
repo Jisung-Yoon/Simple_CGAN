@@ -23,5 +23,6 @@ First, download dataset with:
 Second, write the main function with configuration you want.
 
 ## Results
-Result with same latent variables (0 to 100 epochs)
+Result with same latent variables (0 to 100 epochs).
+Each number (0 to 9) can be generated as you want by using CGAN.
 ![result](assets/Result.gif)
